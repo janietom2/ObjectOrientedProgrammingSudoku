@@ -1,15 +1,17 @@
 package utep.css.sudoku;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Console
 {
-    private InputStream in;
+    private int size;
     private PrintStream out;
+    public Scanner input = new Scanner(System.in);
 
     public Console(){
         out = new PrintStream(System.out);
-        in  = new InputStream(System.in);
+        //in  = new InputStream(System.in);
     }
 
     public void welcomeMessage() {
@@ -17,13 +19,31 @@ public class Console
     }
 
     public int askSize() {
-        // This is a test (Need to ask for the Size)
-
-        return 4;
+        out.println("Please set a size for your board: ");
+        this.size     = input.nextInt();
+        return this.size;
     }
 
     public void showMessage(Object x) {
+        System.out.println(x);
+    }
 
+    public int inputNumber() {
+        System.out.println("Input a number to fill");
+
+        return input.nextInt();
+    }
+
+    public int inputCol() {
+        System.out.println("Select which Column");
+
+        return input.nextInt();
+    }
+
+    public int inputRow() {
+        System.out.println("Select which Row");
+
+        return input.nextInt();
     }
 
 }
