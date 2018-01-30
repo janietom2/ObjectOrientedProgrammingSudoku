@@ -19,7 +19,7 @@ public class Console
     }
 
     public int askSize() {
-        out.println("Please set a size for your board: ");
+        out.println("Please set a size for your board (Remember is nxn: ");
         this.size     = input.nextInt();
         return this.size;
     }

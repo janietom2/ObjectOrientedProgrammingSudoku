@@ -18,7 +18,7 @@ public class Main {
         board = new Board(size);
         board.showBoard();
 
-        while( !board.isSolved() ) {
+        while( !board.isSolved()) {
             inputNumber    = consoleUI.inputNumber();
             selectedColumn = consoleUI.inputCol();
             selectedRow    = consoleUI.inputRow();
