@@ -1,3 +1,10 @@
+/***************************************************************
+ * Created by: Jose Nieto
+ * CS 3331 Advanced Object-Oriented Programming, Spring 2018
+ * Last Modification: 29/01/2018
+ ***************************************************************/
+
+
 package utep.css.sudoku;
 
 import java.util.Random;
@@ -14,12 +21,23 @@ public class Board {
     }
 
     public boolean isSolved() {
-        return sumNumbers();
+
+        for (int i = 1; i < this.board.length ; i++) {
+            for (int j = 1; j < this.board[i].length ; j++) {
+                if(this.board[i][j] == 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public int[][] getBoard() {
+        return this.board;
     }
 
     private void generate() {
         //this.board = new int[(int)Math.pow(size,2)][(int)Math.pow(size,2)]; // Debug test
-        this.board = new int[this.size*3][this.size*3];
+        this.board = new int[this.size*this.size][this.size*this.size];
 
         int colCounter = 0;
         int rowCounter = 0;
@@ -30,74 +48,18 @@ public class Board {
                 colCounter = 0;
                 rowCounter = 0;
             }
-                for (int col = 0; col < 3 ; col++) {
-                    for (int row = 0; row < 3 ; row++) {
+                for (int col = 0; col < this.size ; col++) {
+                    for (int row = 0; row < this.size ; row++) {
                         this.board[colCounter][rowCounter] = 0;
                         rowCounter++;
                     }
                     colCounter++;
                 }
-
         }
 
     }
 
-    public void showBoard() {
-        for(int col = 0; col < this.board.length; col++) {
-            for(int row = 0; row < this.board[col].length; row++) {
-                if (row % 3 == 0) {
-                    System.out.print("   ");
-                    System.out.print("|      ");;
-                }
-                if (this.board[row][col] == 0) System.out.print("X ");
-                else System.out.print(this.board[row][col] + " ");
-                if (row == this.board.length - 1 && (col+1) % 3 == 0 && col != 0) System.out.print("    \n  ");
-            }
-            System.out.print("\n");
-        }
-    }
 
-    /***************************
-     *                         *
-     *      Solving methods    *
-     *                         *
-     **************************/
-
-    /**
-     *
-     *  This method will calculate the sum of all numbers on the current sudoku board.
-     *  It will check and return a boolean. Positive if the sum of the current sudoky is equals to a solved sudoku
-     *
-     * @return
-     */
-
-    private boolean sumNumbers() {
-        int rowSum = 0;
-
-        for (int col = 0; col < this.board.length ; col++) {
-            for (int row = 0; row < this.board[col].length ; row++)
-                rowSum += this.board[col][row];
-        }
-
-        return (rowSum == solvingNumber());
-
-    }
-
-    /**
-     *  This method will solve the sum of all the sudoku numbers, meaning that if the users fills all sudoku
-     *  the sum of all numbers should be the same as the return of this method
-     * @return
-     */
-    private int solvingNumber() {
-        int sum = 0;
-
-        for (int i = 1; i <= this.board.length ; i++) {
-            sum += i;
-        }
-
-        return sum * this.board.length;
-
-    }
 
     /*******************************
      *                             *
@@ -134,15 +96,26 @@ public class Board {
      *                             *
      ******************************/
 
+
+    /**
+     *
+     * This methods validates the user input using another methods
+     *
+     */
     private boolean isValid(int n, int col, int row) {
 
-        if(this.isInsideColumn(n, row) || this.isInsideRow(n, col))
+        if(invalidInput(n, col, row) || isOccupied(col, row) ||this.isInsideColumn(n, row) || this.isInsideRow(n, col) || isInsideSquare(n, col, row))
             return false;
         else
             return true;
 
     }
 
+    /**
+     *
+     * This method check if the input is inside a row
+     *
+     **/
     private boolean isInsideRow(int n, int col) {
         for (int i = 0; i < this.board.length ; i++) {
             if(this.board[col][i] == n)
@@ -151,12 +124,79 @@ public class Board {
         return false;
     }
 
+    /**
+     *
+     * This method check if the input is inside a column
+     *
+     **/
     private boolean isInsideColumn(int n, int row) {
         for(int i = 0; i < this.board.length ; i++) {
             if(this.board[i][row] == n)
                 return true;
         }
         return false;
+    }
+    /**
+     *
+     * This method check if the input in inside the same square
+     *
+     **/
+    private boolean isInsideSquare(int n, int col, int row) {
+
+        int r = row/this.size;
+        int c = col/this.size;
+
+        for (int i = col; i < c+(this.size) ; i++) {
+            for (int j = row; j < r+(this.size) ; j++) {
+                if(this.board[i][j] == n) {
+                    System.out.println("Inside the Square");
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * This method checks if that pointed col and row is already occupied by another number
+     *
+     */
+    private boolean isOccupied(int col, int row) {
+        if(this.board[col][row] != 0){
+            System.out.println("Is occupied");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     *  This methods checks if the method n is valid and that col and row are not out of bounds
+     *
+     */
+    private boolean invalidInput(int n, int col, int row) {
+
+        if(n > this.size*this.size || n <= 0 || col >= this.board.length || row >= this.board.length)
+            return true;
+
+        return false;
+    }
+
+    /***********************
+     *                     *
+     *    Extra options    *
+     *                     *
+     **********************/
+
+    /**
+     *
+     * This method resets the whole board, every values goes to 0 again
+     *
+     */
+    public void reset() {
+        this.generate();
     }
 
 }
